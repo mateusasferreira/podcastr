@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { useRouter } from "next/router";
+import Head from 'next/head'
 import { api } from "../../service/api";
 import { format, parseISO } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
@@ -7,6 +7,7 @@ import { convertDurationToTimeString } from "../../utils/convertDurationToTimeSt
 import styles from "./episode.module.scss";
 import Image from "next/image";
 import Link from "next/link";
+import { usePlayer } from "../../contexts/PlayerContext";
 
 type Episode = {
   id: number;
@@ -25,8 +26,16 @@ type EpisodeProps = {
 };
 
 export default function Episode({ episode }: EpisodeProps) {
+  
+  const {play} = usePlayer()
+  
   return (
     <div className={styles.episode}>
+      
+      <Head>
+        <title>{episode.title} | Podcastr</title>
+      </Head>      
+      
       <div className={styles.thumbnailContainer}>
         
         <Link href="/">
@@ -42,7 +51,7 @@ export default function Episode({ episode }: EpisodeProps) {
           objectFit="cover"
         />
         <button type="button">
-            <img src="/play.svg" alt="Tocar Episódio" />
+            <img src="/play.svg" alt="Tocar Episódio" onClick={() => play(episode)}/>
         </button>
         </div>
         <header>
@@ -50,8 +59,8 @@ export default function Episode({ episode }: EpisodeProps) {
           <span>{episode.members}</span>
           <span>{episode.publishedAt}</span>
           <span>{episode.durationAsString}</span>
-          <div className={styles.description}>
-              {episode.description}
+          <div className={styles.description} dangerouslySetInnerHTML={{__html: episode.description}}>
+              
           
           </div>
         </header>

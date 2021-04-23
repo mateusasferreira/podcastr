@@ -15,6 +15,8 @@ export default function Player() {
     isPlaying,
     togglePlay,
     setPlayingState,
+    playNext,
+    playPrevious
   } = useContext(PlayerContext);
 
   const episode = episodeList[currentEpisodeIndex];
@@ -87,7 +89,7 @@ export default function Player() {
             <img src="/shuffle.svg" alt="tocar aleatório" />
           </button>
           <button type="button" disabled={!episode}>
-            <img src="/play-previous.svg" alt="tocar anterior" />
+            <img src="/play-previous.svg" onClick={playPrevious} alt="tocar anterior" />
           </button>
           <button
             type="button"
@@ -102,7 +104,7 @@ export default function Player() {
             )}
           </button>
           <button type="button" disabled={!episode}>
-            <img src="/play-next.svg" alt="tocar anterior" />
+            <img src="/play-next.svg" onClick={playNext} alt="tocar anterior" />
           </button>
           <button type="button" disabled={!episode}>
             <img src="/repeat.svg" alt="repetir" />

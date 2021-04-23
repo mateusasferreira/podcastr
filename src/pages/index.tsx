@@ -5,6 +5,9 @@ import { api } from "../service/api";
 import { convertDurationToTimeString } from "../utils/convertDurationToTimeString";
 import Image from "next/image";
 import styles from "./home.module.scss";
+import Link from "next/link";
+import { useContext } from "react";
+import { PlayerContext } from "../contexts/PlayerContext";
 
 type Episode = {
   id: number;
@@ -24,6 +27,9 @@ type HomeProps = {
 };
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  
+  const {play} = useContext(PlayerContext)
+  
   return (
     <div className={styles.homepage}>
       <section className={styles.latestEpisodes}>
@@ -37,17 +43,19 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   width={192}
                   height={192}
                   alt={episode.title}
-                  objectFit='cover'
+                  objectFit="cover"
                 />
                 <div className={styles.episodeDetails}>
-                  <a href="">{episode.title}</a>
+                  <Link href={`/episodes/${episode.id}`}>
+                    <a href="">{episode.title}</a>
+                  </Link>
                   <p>{episode.members}</p>
                   <span>{episode.publishedAt}</span>
                   <span>{episode.durationAsString}</span>
                 </div>
 
                 <button type="button">
-                  <img src="/play-green.svg" alt="Tocar episódio" />
+                  <img src="/play-green.svg" alt="Tocar episódio" onClick={() => play(episode)}/>
                 </button>
               </li>
             );
@@ -56,45 +64,48 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
       </section>
 
       <section className={styles.allEpisodes}>
+        <table cellSpacing={0}>
           <h2>Todos episódios</h2>
-          <table cellSpacing={0}>
-            <thead>
-              <th></th>
-              <th>Podcast</th>
-              <th>Integrantes</th>
-              <th>Data</th>
-              <th>Duração</th>
-              <th></th>
-            </thead>
-          </table>
+          <thead>
+            <th></th>
+            <th>Podcast</th>
+            <th>Integrantes</th>
+            <th>Data</th>
+            <th>Duração</th>
+            <th></th>
+          </thead>
+
           <tbody>
-            {allEpisodes.map(episode => {
+            {allEpisodes.map((episode) => {
               return (
                 <tr key={episode.id}>
-                  <td>
-                    <Image 
+                  <td style={{ width: 72 }}>
+                    <Image
                       src={episode.thumbnail}
                       width={120}
                       height={120}
                       alt={episode.title}
-                      objectFit='cover'
+                      objectFit="cover"
                     />
                   </td>
                   <td>
-                    <a href="">{episode.title}</a>
+                    <Link href={`/episodes/${episode.id}`}>
+                      <a href="">{episode.title}</a>
+                    </Link>
                   </td>
                   <td>{episode.members}</td>
-                  <td>{episode.publishedAt}</td>
+                  <td style={{ width: 100 }}>{episode.publishedAt}</td>
                   <td>{episode.durationAsString}</td>
                   <td>
-                    <button type='button'>
-                      <img src="/play-green.svg" alt="Tocar episódio"/>
+                    <button type="button">
+                      <img src="/play-green.svg" alt="Tocar episódio" />
                     </button>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
+        </table>
       </section>
     </div>
   );

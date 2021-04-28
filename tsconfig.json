@@ -24,6 +24,7 @@
     "**/*.tsx",
     "pages/**/*",
     "src/**/*",
+    "**/*.scss"
   ],
   "exclude": [
     "node_modules"
